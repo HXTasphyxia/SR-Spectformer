@@ -1,0 +1,44 @@
+# configs/default.yaml
+# 光谱重建任务配置文件
+
+# 数据配置
+data:
+  data_root: "data/TOSHI"          # 光谱数据根目录
+  image_size: 512                   # 图像尺寸（模型输入，超分前）
+  sr_upscale: 2                     # 超分倍率（例如 2 表示 256->512）
+  batch_size: 1                     # 批次大小（减小以适应内存）
+  num_workers: 0                    # 减少线程数降低内存占用
+  psf_path: null                    # PSF文件路径（可选）
+  use_optical_encoding: true       # 是否使用光学编码
+  lens_file: "optics/lens/A_001.json"  # 镜头文件路径（用于生成PSF）
+
+
+# 训练配置
+training:
+  epochs: 5                        # 训练轮数
+  learning_rate: 0.001              # 学习率
+  lr_min: 0.000001                  # 最小学习率（使用标准浮点数格式）
+  weight_decay: 0.0001              # 权重衰减
+  seed: 42                          # 随机种子
+  val_freq: 5                       # 验证频率
+  checkpoint_dir: "output/default"  # 检查点保存目录
+
+# 输出配置
+output:
+  dir: "output/default"             # 输出目录
+  log_file: "train.log"             # 日志文件名
+  checkpoint_freq: 10               # 检查点保存频率
+  val_split: 0.2                    # 验证集比例
+
+# 模型配置
+model:
+  name: spectformer_s
+  num_classes: 31
+  pretrained: false
+
+# 损失函数配置
+loss:
+  type: weighted_mse
+  mse_weight: 1.0
+  ssim_weight: 1.0
+  lpips_weight: 0.1
